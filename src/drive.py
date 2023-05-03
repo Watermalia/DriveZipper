@@ -1,20 +1,10 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+from oauth2client.service_account import ServiceAccountCredentials
 
 gauth = GoogleAuth()
-gauth.LoadCredentialsFile("mycreds.txt")
-if gauth.credentials is None:
-    # Authenticate if they're not there
-    gauth.LocalWebserverAuth()
-elif gauth.access_token_expired:
-    # Refresh them if expired
-    gauth.Refresh()
-else:
-    # Initialize the saved creds
-    gauth.Authorize()
-# Save the current credentials to a file
-gauth.SaveCredentialsFile("mycreds.txt")
-
+scope = ["https://www.googleapis.com/auth/drive"]
+gauth.credentials = ServiceAccountCredentials.from_json_keyfile_name("drivezipper_sa.json", scope)
 drive = GoogleDrive(gauth)
 
 def uploadFile(file, dir):
