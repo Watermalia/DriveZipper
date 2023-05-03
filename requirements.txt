@@ -1,0 +1,4 @@
+pydrive
+customtkinter
+qbittorrent
+py7zr
