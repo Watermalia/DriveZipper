@@ -5,7 +5,7 @@ from tkinter import filedialog
 import customtkinter
 from zip import zip
 from drive import uploadFile, getFolders
-from torrent import download
+from download import download
 
 # Set theme for GUI
 customtkinter.set_appearance_mode("dark")
