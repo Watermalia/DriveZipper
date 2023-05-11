@@ -1,11 +1,30 @@
 import os
 import tkinter
 from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, simpledialog, messagebox
 import customtkinter
+import configparser
+import pyperclip
 from zip import zip
-from drive import uploadFile, getFolders
+import googledrive
 from download import download
+
+config = configparser.ConfigParser()
+if(os.path.exists('settings.ini')):
+    config.read('settings.ini')
+    base_url_id = config['DEFAULT']['base_url_id']
+else: # First time setup
+    pyperclip.copy('drivezipper-sa@drivezipper.iam.gserviceaccount.com')
+    base_url = tkinter.simpledialog.askstring("Setup", "Share the base google drive folder with " + 
+                                              "\n'drivezipper-sa@drivezipper.iam.gserviceaccount.com'" + 
+                                              "\n(which has been copied to your clipboard)\n and paste " +
+                                              "the url of the folder here:")
+    base_url_id = base_url.split("/")[-1]
+    config['DEFAULT'] = {'base_url_id': base_url_id}
+    with open('settings.ini', 'w') as configfile:
+        config.write(configfile)
+
+drive = googledrive.Google_Drive(base_url_id)
 
 # Set theme for GUI
 customtkinter.set_appearance_mode("dark")
@@ -29,7 +48,7 @@ class GUI(object):
 
         # other variables
         downloadInput = None
-        folders = getFolders()
+        folders = drive.getFolders()
         foldernames = list(folders.keys())
         driveFolder = None
         zipFormat = tkinter.StringVar(value=".zip")

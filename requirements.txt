@@ -2,3 +2,5 @@ pydrive
 customtkinter
 qbittorrent
 py7zr
+configparser
+pyperclip
