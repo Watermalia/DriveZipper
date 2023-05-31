@@ -201,6 +201,7 @@ class GUI(object):
                 zipped = zip(os.path.join(os.getcwd(), "download", torrent_info.name), self.zip_entry.get(), self.zip_option.get())
             else:
                 zipped = zip(self.download_entry.get(), self.zip_entry.get(), self.zip_option.get())
+            print("done zipping!")
 
         # Then we upload!
         if root.getvar(name="upload"):

@@ -1,9 +1,8 @@
 import py7zr, shutil, os, zipfile, sys
 from py7zr import pack_7zarchive, unpack_7zarchive
-from aioshutil import make_archive
 
 # Zip up the given directory with specified name and format
-async def zip(dir, filename: str, format: str):
+def zip(dir, filename: str, format: str):
     
     # Normalize the path
     dir = os.path.normpath(dir)
@@ -18,5 +17,5 @@ async def zip(dir, filename: str, format: str):
         return {"name": f"{filename}.7z", "dir": os.path.join(os.getcwd(), f"{filename}.7z")}
 
     elif(format == ".zip"):  # Compress using zip format
-        await make_archive(filename, 'zip', os.path.dirname(dir), os.path.basename(dir))
+        shutil.make_archive(filename, 'zip', os.path.dirname(dir), os.path.basename(dir))
         return {"name": f"{filename}.zip", "dir": os.path.join(os.getcwd(), f"{filename}.zip")}
