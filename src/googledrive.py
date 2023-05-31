@@ -14,7 +14,7 @@ class Google_Drive:
         pass
 
     def getFolders(self):
-        f = self.drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
+        f = self.drive.ListFile({"q": "mimeType='application/vnd.google-apps.folder' and trashed=false"}).GetList()
         folders = dict()
         for file in f:
             if(file['mimeType'] == "application/vnd.google-apps.folder"):
