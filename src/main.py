@@ -6,6 +6,7 @@ import customtkinter
 import configparser
 import pyperclip
 from zip import zip
+#from googledrive import uploadFile
 import googledrive
 from download import download
 
@@ -140,18 +141,20 @@ class GUI(object):
     def submit(self):
         
         # First we torrent
-        #torrent = download()
+        if self.download_bool:
+            torrent = download(magnet_link=self.download_entry.get())
 
         # Then we zip
-        #zipped = zip(dir, filename, format)
+        # if self.zip_bool:
+        #     zipped = zip(dir, self.zip_entry.get(), self.zip_option.get())
 
         # Then we upload!
-        #uploadFile()
+        # if self.upload_bool:
+        #     uploadFile()
 
-        # TODO
         # Then we delete the zip!
-        #os.remove(zipped)
-        pass
+        # if self.delete_bool:
+        #     os.remove(zipped)
 
 root = customtkinter.CTk()
 gui = GUI(root)

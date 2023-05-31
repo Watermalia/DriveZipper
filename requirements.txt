@@ -1,6 +1,6 @@
 pydrive
 customtkinter
-qbittorrent
+qbittorrent-api
 py7zr
 configparser
 pyperclip
