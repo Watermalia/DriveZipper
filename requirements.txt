@@ -4,3 +4,4 @@ qbittorrent-api
 py7zr
 configparser
 pyperclip
+aioshutil
