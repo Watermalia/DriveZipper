@@ -44,12 +44,12 @@ class GUI(object):
         # Define variables here
         # -------------------------------------------------
         # bools for tickboxes
-        self.download_bool = tkinter.BooleanVar(value=True)
-        self.zip_bool = tkinter.BooleanVar(value=True)
-        self.upload_bool = tkinter.BooleanVar(value=True)
-        self.delete_folder_bool = tkinter.BooleanVar(value=True)
-        self.delete_zip_bool = tkinter.BooleanVar(value=True)
-        self.remove_torrent_bool = tkinter.BooleanVar(value=True)
+        self.download_bool = tkinter.BooleanVar(root, name="download", value=True)
+        self.zip_bool = tkinter.BooleanVar(root, name="zip", value=True)
+        self.upload_bool = tkinter.BooleanVar(root, name="upload", value=True)
+        self.delete_folder_bool = tkinter.BooleanVar(root, name="delete_folder", value=True)
+        self.delete_zip_bool = tkinter.BooleanVar(root, name="delete_zip", value=True)
+        self.remove_torrent_bool = tkinter.BooleanVar(root, name="remove_torrent", value=True)
 
         # other variables
         self.folders = drive.getFolders()
@@ -84,10 +84,12 @@ class GUI(object):
         self.upload_dropdown = customtkinter.CTkOptionMenu(master=root, values=self.foldernames, width=300, variable=self.driveFolder)
         self.upload_dropdown.place(relx=0.25, rely=0.5)
         self.upload_dropdown.set("<Select Google Drive Folder>")
-        self.new_folder_button = customtkinter.CTkButton(master=root, text="New", width=50, command=self.new_folder)
-        self.new_folder_button.place(relx=0.8, rely=0.5)
+        self.new_folder_button = customtkinter.CTkButton(master=root, text="New", width=30, command=self.new_folder)
+        self.new_folder_button.place(relx=0.77, rely=0.5)
         self.refresh_folders_button = customtkinter.CTkButton(master=root, text="↺", width=30, command=self.refresh_folders)
-        self.refresh_folders_button.place(relx=0.9, rely=0.5)
+        self.refresh_folders_button.place(relx=0.85, rely=0.5)
+        self.delete_folder_button = customtkinter.CTkButton(master=root, text="🗑", width=30, command=self.delete_folder)
+        self.delete_folder_button.place(relx=0.91, rely=0.5)
 
         # Delete After Section
         self.remove_torrent_checkbox = customtkinter.CTkCheckBox(master=root, text="Remove Torrent", variable=self.remove_torrent_bool)
@@ -166,13 +168,13 @@ class GUI(object):
 
     def refresh_folders(self):
         self.folders = drive.getFolders()
-        menu = self.upload_dropdown["menu"]
-        menu.delete(0, "end")
-        for item in self.folders:
-            menu.add_command(
-                label=item,
-                command=lambda value=item: self.upload.set(value)
-            )
+        self.foldernames = sorted(list(self.folders.keys()))
+        self.upload_dropdown.configure(values=self.foldernames)
+
+    def delete_folder(self):
+        folder_name = self.upload_dropdown.get()
+        drive.delete_folder(folder_name)
+        self.upload_dropdown.set("<Select Google Drive Folder>")
 
     def submit(self):
         
@@ -183,8 +185,8 @@ class GUI(object):
         self.progresslabel = customtkinter.CTkLabel(master=root, text="STARTING")
         self.progresslabel.place(relx=0.5, rely=0.8, anchor=tkinter.CENTER)
 
-        # First we torrent
-        if self.download_bool:
+        # First we download
+        if root.getvar(name="download"):
             self.progresslabel.configure(text="DOWNLOADING...")
             self.progressbar.set(0.25)
             torrent_info = download(magnet_link=self.download_entry.get())
@@ -192,30 +194,30 @@ class GUI(object):
                 root.update()
 
         # Then we zip
-        if self.zip_bool:
+        if root.getvar(name="zip"):
             self.progresslabel.configure(text="COMPRESSING...")
             self.progressbar.set(0.5)
-            if self.download_bool:
+            if root.getvar(name="download"):
                 zipped = zip(os.path.join(os.getcwd(), "download", torrent_info.name), self.zip_entry.get(), self.zip_option.get())
             else:
                 zipped = zip(self.download_entry.get(), self.zip_entry.get(), self.zip_option.get())
 
         # Then we upload!
-        # if self.upload_bool:
-        #     self.progresslabel.configure(text="UPLOADING...")
-        #     self.progressbar.set(0.75)
-        #     uploadFile(zipped, )
+        if root.getvar(name="upload"):
+            self.progresslabel.configure(text="UPLOADING...")
+            self.progressbar.set(0.75)
+            drive.uploadFile(zipped["name"], self.folders[self.upload_dropdown.get()])
 
         # Then we delete the specified folders/files
-        if self.delete_folder_bool:
+        if root.getvar(name="delete_folder"):
             self.progresslabel.configure(text="DELETING...")
             self.progressbar.set(0.9)
             remove_torrent(True, get_torrent_hash())
-        elif self.remove_torrent_bool:
+        elif root.getvar(name="delete_zip") and root.getvar(name="download"):
             self.progresslabel.configure(text="DELETING...")
             self.progressbar.set(0.9)
             remove_torrent(False, get_torrent_hash())
-        if self.delete_zip_bool:
+        if root.getvar(name="remove_torrent"):
             self.progresslabel.configure(text="DELETING...")
             self.progressbar.set(0.9)
             os.remove(zipped)
