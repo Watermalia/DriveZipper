@@ -10,8 +10,9 @@ class Google_Drive:
         self.drive = GoogleDrive(self.gauth)
         self.folder_id = folder_id
 
-    def uploadFile(self, filename, parent):
+    def uploadFile(self, filename, parent, path):
         newFile = self.drive.CreateFile({'title': filename, 'parents': [{'id': parent}]})
+        newFile.SetContentFile(path)
         newFile.Upload()
 
     def getFolders(self):
