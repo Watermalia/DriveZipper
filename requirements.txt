@@ -5,3 +5,4 @@ py7zr
 configparser
 pyperclip
 aioshutil
+httplib2 == 0.15.0
