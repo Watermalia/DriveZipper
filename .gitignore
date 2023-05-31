@@ -5,3 +5,6 @@ tempCodeRunnerFile.py
 settings.yaml
 drivezipper_sa.json
 settings.ini
+build/
+dist/
+DriveZipper.spec
