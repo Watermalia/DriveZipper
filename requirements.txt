@@ -1,4 +1,4 @@
-pydrive
+pydrive2
 customtkinter
 qbittorrent-api
 py7zr
