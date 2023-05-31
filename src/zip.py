@@ -10,8 +10,8 @@ def zip(dir, filename: str, format: str):
         with py7zr.SevenZipFile(f"{filename}.7z", 'w') as archive:
             archive.writeall(f'{dir}', os.path.basename(dir))
             archive.close()
-            return os.path.join(dir, f"{filename}.7z")
+            return os.path.join(os.getcwd(), f"{filename}.7z")
 
     elif(format == ".zip"):  # Compress using zip format
         shutil.make_archive(filename, 'zip', os.path.dirname(dir), os.path.basename(dir))
-        return os.path.join(dir, f"{filename}.zip")
+        return os.path.join(os.getcwd(), f"{filename}.zip")
