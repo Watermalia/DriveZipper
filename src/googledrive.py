@@ -10,8 +10,9 @@ class Google_Drive:
         self.drive = GoogleDrive(self.gauth)
         self.folder_id = folder_id
 
-    def uploadFile(self, file, dir):
-        pass
+    def uploadFile(self, filename, parent):
+        newFile = self.drive.CreateFile({'title': filename, 'parents': [{'id': parent}]})
+        newFile.Upload()
 
     def getFolders(self):
         f = self.drive.ListFile({"q": "mimeType='application/vnd.google-apps.folder' and trashed=false"}).GetList()
@@ -29,3 +30,13 @@ class Google_Drive:
         }
         folder = self.drive.CreateFile(file_metadata)
         folder.Upload()
+
+    def delete_folder(self, folderName):
+        f = self.drive.ListFile({"q": "mimeType='application/vnd.google-apps.folder' and trashed=false"}).GetList()
+        folders = dict()
+        for file in f:
+            if(file['mimeType'] == "application/vnd.google-apps.folder" and file['title'] == folderName):
+                file.Delete()
+
+drive = Google_Drive("1vNKiSTNI8RtQNnwQw8xGyCkwghJhvUGq")
+drive.delete_folder("Poop")
