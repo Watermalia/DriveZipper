@@ -1,6 +1,8 @@
 # DriveZipper
 A program that downloads, zips, and uploads all in one!
 
+![image](https://github.com/Watermalia/DriveZipper/assets/9553721/31bade7c-7ecf-4433-b4b7-671cfb5fca36)
+
 Specifically, this program has the functionality to do the following:
 - Download torrents using magnet links
 - Zip directories into .zip files
